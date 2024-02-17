@@ -4,6 +4,7 @@ class MovableObject extends DrawableOject {
     speedY = 0;
     acceleration = 2.5;
     energy = 100;
+    gameOver = false;
     collected_coins = 0;
     collected_bottles = 0;
     lastHit = 0;
@@ -26,8 +27,8 @@ class MovableObject extends DrawableOject {
     }
 
 
-    hit() {
-        this.energy -= 5;
+    hit(e) {
+        this.energy -= e;
         if (this.energy < 0) {
             this.energy = 0;
         } else {

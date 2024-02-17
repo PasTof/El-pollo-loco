@@ -8,8 +8,9 @@ class World {
     statusBar = new StatusBar();
     coinBar = new CoinBar();
     bottleBar = new BottleBar();
+    statusBarEndboss = new StatusBarEndboss();
     throwableObjects = [];
-
+    gameOverScreen = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -24,14 +25,38 @@ class World {
         this.character.world = this;
     }
 
+    gameover(){
+        if (this.character.gameOver) {
+            let dead = new Gameover();
+            this.gameOverScreen.push(dead);
+        }
+    }
+
+    checkGameOver(){
+        if (this.character.energy == 0) {
+            this.character.gameOver = true;
+            this.gameover();
+        }
+    }
+
+    checkGameOverEnemie(){
+        if (this.enemies.energy == 0) {
+            this.enemies.gameOver = true;
+            this.gameover();
+        }
+    }
+
     run() {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
             this.checkcoin();
             this.checkbottles();
+            this.checkGameOver();
+            this.checkCollisionEndboss();
         }, 200);
     }
+
 
     checkThrowObjects() {
         if (this.keyboard.D && this.character.collected_bottles > 0) {
@@ -42,10 +67,19 @@ class World {
         }
     }
 
+    checkCollisionEndboss(){
+        this.level.throwableObjects.forEach((enemy) => {
+            if (this.enemies.isColliding(enemy)) {
+                this.enemies.hit(50);
+                console.log('hit')
+            }
+        });
+    }
+
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
+                this.character.hit(5);
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
@@ -86,9 +120,14 @@ class World {
         this.addToMap(this.character);
         this.addObjectToMap(this.level.clouds);
         this.addObjectToMap(this.level.enemies);
+        this.addToMap(this.statusBarEndboss);
         this.addObjectToMap(this.level.coins);
         this.addObjectToMap(this.level.bottles);
         this.addObjectToMap(this.throwableObjects);
+
+        this.ctx.translate(-this.camera_x, 0);
+        this.addObjectToMap(this.gameOverScreen);
+        this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
