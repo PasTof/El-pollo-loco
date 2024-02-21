@@ -25,21 +25,21 @@ class World {
         this.character.world = this;
     }
 
-    gameover(){
+    gameover() {
         if (this.character.gameOver) {
             let dead = new Gameover();
             this.gameOverScreen.push(dead);
         }
     }
 
-    checkGameOver(){
+    checkGameOver() {
         if (this.character.energy == 0) {
             this.character.gameOver = true;
             this.gameover();
         }
     }
 
-    checkGameOverEnemie(){
+    checkGameOverEnemie() {
         if (this.enemies.energy == 0) {
             this.enemies.gameOver = true;
             this.gameover();
@@ -53,7 +53,7 @@ class World {
             this.checkcoin();
             this.checkbottles();
             this.checkGameOver();
-            this.checkCollisionEndboss();
+            this.checkCollisionEnemy();
         }, 200);
     }
 
@@ -67,11 +67,15 @@ class World {
         }
     }
 
-    checkCollisionEndboss(){
-        this.level.throwableObjects.forEach((enemy) => {
-            if (this.enemies.isColliding(enemy)) {
-                this.enemies.hit(50);
-                console.log('hit')
+    checkCollisionEnemy() {
+        this.level.enemies.forEach((enemy) => {
+            this.throwableObjects.forEach(element => {
+                if (element.isColliding(enemy)) {
+                    enemy.hit(20);
+                }
+            });
+            if (this.character.topPartBottomContact(enemy)) {
+                enemy.hit(100);
             }
         });
     }

@@ -72,6 +72,13 @@ class MovableObject extends DrawableOject {
             this.y < mo.y + mo.height
     }
 
+    topPartBottomContact(mo) {
+        return this.y + this.height >= mo.y &&
+               this.y + this.height <= mo.y + (mo.height) &&
+               this.x + this.width > mo.x &&
+               this.x < mo.x + mo.width;
+    }
+
     colletingCoin(mo) {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
