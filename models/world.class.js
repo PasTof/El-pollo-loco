@@ -11,15 +11,19 @@ class World {
     statusBarEndboss = new StatusBarEndboss();
     throwableObjects = [];
     gameOverScreen = [];
+    startscreen = new Backgroundobject('img/9_intro_outro_screens/start/startscreen_1.png', 0);
+    start_sound = new Audio('audio/starting.mp3');
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.run();
         this.draw();
         this.setWorld();
-        this.run();
     }
+
 
     setWorld() {
         this.character.world = this;
@@ -29,20 +33,26 @@ class World {
         if (this.character.gameOver) {
             let dead = new Gameover();
             this.gameOverScreen.push(dead);
+            this.clearAllIntervals();
+            setTimeout(() => {
+                location.reload();
+            }, 4000);
         }
     }
 
     checkGameOver() {
         if (this.character.energy == 0) {
             this.character.gameOver = true;
-            this.gameover();
+            setTimeout(() => {
+                this.gameover();
+            }, 1000);
+
         }
     }
 
     checkGameOverEnemie() {
         if (this.enemies.energy == 0) {
             this.enemies.gameOver = true;
-            this.gameover();
         }
     }
 
@@ -54,7 +64,7 @@ class World {
             this.checkbottles();
             this.checkGameOver();
             this.checkCollisionEnemy();
-        }, 200);
+        }, 120);
     }
 
 
@@ -71,7 +81,9 @@ class World {
         this.level.enemies.forEach((enemy) => {
             this.throwableObjects.forEach(element => {
                 if (element.isColliding(enemy)) {
-                    enemy.hit(20);
+                    element.splashBottle = true;
+                    enemy.hit(5);
+                    this.statusBarEndboss.setPercentage(enemy.energy)
                 }
             });
             if (this.character.topPartBottomContact(enemy)) {
@@ -110,30 +122,35 @@ class World {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (!this.keyboard.ENTER) {
+            this.addToMap(this.startscreen);
+        } else {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectToMap(this.level.backgroundObjects);
+            this.ctx.translate(this.camera_x, 0);
+            this.addObjectToMap(this.level.backgroundObjects);
 
-        this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBar);
-        this.addToMap(this.coinBar);
-        this.addToMap(this.bottleBar);
-        this.ctx.translate(this.camera_x, 0);
+            this.ctx.translate(-this.camera_x, 0);
+            this.addToMap(this.statusBar);
+            this.addToMap(this.coinBar);
+            this.addToMap(this.bottleBar);
+            this.ctx.translate(this.camera_x, 0);
 
-        this.addToMap(this.character);
-        this.addObjectToMap(this.level.clouds);
-        this.addObjectToMap(this.level.enemies);
-        this.addToMap(this.statusBarEndboss);
-        this.addObjectToMap(this.level.coins);
-        this.addObjectToMap(this.level.bottles);
-        this.addObjectToMap(this.throwableObjects);
+            this.addToMap(this.character);
+            this.addObjectToMap(this.level.clouds);
+            this.addObjectToMap(this.level.enemies);
+            this.addToMap(this.statusBarEndboss);
+            this.addObjectToMap(this.level.coins);
+            this.addObjectToMap(this.level.bottles);
+            this.addObjectToMap(this.throwableObjects);
 
-        this.ctx.translate(-this.camera_x, 0);
-        this.addObjectToMap(this.gameOverScreen);
-        this.ctx.translate(this.camera_x, 0);
-        this.ctx.translate(-this.camera_x, 0);
+            this.ctx.translate(-this.camera_x, 0);
+            this.addObjectToMap(this.gameOverScreen);
+            this.ctx.translate(this.camera_x, 0);
+            this.ctx.translate(-this.camera_x, 0);
 
+
+        }
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -169,6 +186,10 @@ class World {
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+
+    clearAllIntervals() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
 }
 
