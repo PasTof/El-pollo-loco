@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El pollo loco</title>
+    <link rel="icon" type="image/png" href="img/2_character_pepe/2_walk/W-21.png">
     <link rel="stylesheet" href="style.css">
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
@@ -26,22 +28,27 @@
     <script src="js/game.js"></script>
 
 </head>
+
 <body onload="init()">
 
     <h1>El pollo loco</h1>
 
     <canvas id="canvas" width="720" height="480">
+
     </canvas>
 
     <div>
-        ENTER = start game <br>
-        SPACE = Springen <br>
-        PFEILTASTEN = Gehen (rechts/links) <br>
-        D TASTE = Flasche werfen
-        <div onclick="fullScreen()">
-            FULL SCREEN
+        <div>
+            ENTER = start game <br>
+            SPACE = Springen <br>
+            PFEILTASTEN = Gehen (rechts/links) <br>
+            D TASTE = Flasche werfen
+        </div>
+        <div>
+            <img src="img/icons/expand.svg" alt="" class="expand"  onclick="fullScreen()">
         </div>
 
     </div>
 </body>
+
 </html>

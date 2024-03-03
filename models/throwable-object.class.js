@@ -26,22 +26,29 @@ class ThrowableObject extends MovableObject {
         this.height = 60;
         this.width = 50
         this.throw();
-
     }
 
     throw() {
         this.speedY = 30;
         this.applyGravity();
         setInterval(() => {
-            this.x += 10
+            if (this.splashBottle) {
+                this.x = this.x
+            } else {
+                this.x += 10
+            }
+
         }, 25);
         setInterval(() => {
             if (this.splashBottle) {
-                setTimeout
-                this.y = 600;
+                this.speedY = 0 
+                this.playAnimationDead(this.IMAGES_SPLASH);
+                setTimeout(() => {
+                    this.y = 600
+                }, 500);
+            } else {
+                this.playAnimation(this.IMAGES_THROW);
             }
-            this.playAnimation(this.IMAGES_THROW);
-
         }, 90);
     }
 }

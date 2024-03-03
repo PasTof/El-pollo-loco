@@ -74,6 +74,7 @@ class World {
             this.throwableObjects.push(bottle);
             this.character.collected_bottles -= 10;
             this.bottleBar.setPercentage(this.character.collected_bottles);
+            this.character.currentTime = new Date().getTime();
         }
     }
 
@@ -82,11 +83,11 @@ class World {
             this.throwableObjects.forEach(element => {
                 if (element.isColliding(enemy)) {
                     element.splashBottle = true;
-                    enemy.hit(5);
+                    enemy.hit(3);
                     this.statusBarEndboss.setPercentage(enemy.energy)
                 }
             });
-            if (this.character.topPartBottomContact(enemy)) {
+            if (this.character.colletingCoin(enemy)) {
                 enemy.hit(100);
             }
         });
@@ -103,7 +104,7 @@ class World {
 
     checkcoin() {
         this.level.coins.forEach((coin) => {
-            if (this.character.colletingCoin(coin)) {
+            if (this.character.isColliding(coin)) {
                 coin.y = -200;
                 this.character.collected_coins += 10;
                 this.coinBar.setPercentage(this.character.collected_coins);
@@ -113,7 +114,7 @@ class World {
 
     checkbottles() {
         this.level.bottles.forEach((bottle) => {
-            if (this.character.colletingCoin(bottle)) {
+            if (this.character.isColliding(bottle)) {
                 bottle.y = -200
                 this.character.collected_bottles += 20;
                 this.bottleBar.setPercentage(this.character.collected_bottles);
