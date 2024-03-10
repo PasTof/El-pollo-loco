@@ -14,6 +14,7 @@ class Chicken extends MovableObject {
     ];
 
     getHit = false;
+    startWalking = false;
 
     offset = {
         top: 20,
@@ -33,7 +34,9 @@ class Chicken extends MovableObject {
 
     animate() {
         setInterval(() => {
-            this.moveLeft();
+            if (this.startWalking) {
+                this.moveLeft();
+            }
         }, 1000 / 60);
 
         setInterval(() => {

@@ -12,7 +12,7 @@ class World {
     throwableObjects = [];
     gameOverScreen = [];
     winScreen = [];
-    endboss = this.level.enemies[7];
+    endboss = level.enemies[7];
     startscreen = new Backgroundobject('img/9_intro_outro_screens/start/startscreen_1.png', 0);
     start_sound = new Audio('audio/starting.mp3');
     animationStarted = false;
@@ -25,12 +25,21 @@ class World {
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
-        this.keyboard = keyboard;
-        this.run();
-        this.draw();
+        this.keyboard = keyboard;   
         this.setWorld();
+        this.draw();
+        this.run();
     }
 
+
+    startGame(){
+        if (this.keyboard.ENTER) {
+            for (let i = 0; i < this.level.enemies.length -1; i++) {
+                const enemies = this.level.enemies[i];
+                enemies.startWalking = true
+            }
+        }
+    }
 
     setWorld() {
         this.character.world = this;
@@ -56,8 +65,8 @@ class World {
                 this.clearAllIntervals();
                 setTimeout(() => {
                     location.reload();
-                }, 2000); 
-            }, 2000);
+                }, 1000); 
+            }, 1000);
         }
     }
 
@@ -79,17 +88,18 @@ class World {
     }
 
     run() {
-        setInterval(() => {
-            this.checkCollisions();
-            this.checkThrowObjects();
-            this.checkcoin();
-            this.checkbottles();
-            this.checkGameOver();
-            this.checkCollisionEnemy();
-            this.checkXCharacter();
-            this.winGame();
-        }, 90);
-    }
+            setInterval(() => {
+                this.startGame();
+                this.checkCollisions();
+                this.checkThrowObjects();
+                this.checkcoin();
+                this.checkbottles();
+                this.checkGameOver();
+                this.checkCollisionEnemy();
+                this.checkXCharacter();
+                this.winGame();
+            }, 90);
+        }
 
 
     checkThrowObjects() {
@@ -129,7 +139,7 @@ class World {
             this.jumpOnChicken(enemy);
             if (this.character.isColliding(enemy)) {
                 this.hurtSound.play();
-                this.character.hit(5);
+                this.character.hit(10);
                 this.statusBar.setPercentage(this.character.energy);              
             }
         });
@@ -206,9 +216,10 @@ class World {
             this.addObjectToMap(this.gameOverScreen);
             this.ctx.translate(this.camera_x, 0);
             this.ctx.translate(-this.camera_x, 0);
-
-
         }
+
+
+
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
