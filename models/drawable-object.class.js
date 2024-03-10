@@ -36,7 +36,7 @@ class DrawableOject {
         if (this instanceof Character || this instanceof Chicken) {
             ctx.beginPath();
             ctx.lineWidth = "0";
-            ctx.strokeStyle = "blue";
+            ctx.strokeStyle = "transparent";
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }

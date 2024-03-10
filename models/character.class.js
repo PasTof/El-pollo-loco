@@ -80,6 +80,7 @@ class Character extends MovableObject {
     walking_sound = new Audio('audio/walking.mp3');
     jump_sound = new Audio('audio/jump.mp3');
     currentTime = new Date().getTime();
+    aboveChicken = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -135,15 +136,19 @@ class Character extends MovableObject {
                     this.playAnimation(this.IMAGES_WALKING);
                 } else if (this.timePassedCheckSleep()) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
-                } else if(this.timePassedCheck()){
+                } else if (this.timePassedCheck()) {
                     this.playAnimationDead(this.IMAGES_IDLE);
-                } 
+                }
             }
 
 
         }, 90);
 
 
+    }
+
+    isAboveChicken(mo) {
+        return this.y + this.height - this.offset.bottom -30 < mo.y + mo.offset.top;
     }
 
     timePassedCheck() {

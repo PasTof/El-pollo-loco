@@ -9,6 +9,8 @@ class MovableObject extends DrawableOject {
     collected_bottles = 0;
     lastHit = 0;
     splashBottle = false;
+    dead = false;
+    firstPass = true;
     
     offset = {
         top: 0,
@@ -29,7 +31,9 @@ class MovableObject extends DrawableOject {
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
-        } else {
+        } else if (this.dead) {
+            return true;
+        } else{
             return this.y < 150
         }
     }
