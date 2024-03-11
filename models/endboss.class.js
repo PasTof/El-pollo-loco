@@ -57,7 +57,7 @@ class Endboss extends MovableObject {
 
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
-        this.x = 2500;
+        this.x = 2200;
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
@@ -70,46 +70,39 @@ class Endboss extends MovableObject {
     animate() {
         setInterval(() => {
             if (this.canStartAnimation()) {
-                if (this.startAnimation == true) {
-                  this.setParametersForStartingAnimation();
-                }
-                if (this.canStartAlertAnimation()) {
-                  this.playAnimation(this.IMAGES_ALERT);
-                }
-                if (this.canStartAttackAnimation()) {
-                  this.playAnimation(this.IMAGES_ATTACK)
-                  this.jumpOnRightPicture();
-                }
-                if (this.canStartWalkingAnimation()) {
-                  this.playAnimation(this.IMAGES_WALKING)
-                  this.x -= 20;
-                }
-                if (this.isHurt()) {
-                  this.playAnimation(this.IMAGES_HURT);
-                }
-                if (this.isDead()) {
-                  this.playAnimationDead(this.IMAGES_DEAD);
-                  
-                }
+              this.checkEndbossAnimation();
               }
         }, 90);
     }
 
-  //     /**
-  //  * important parameters for playing the dying animation
-  //  */
-  // endbossDead() {
-  //   this.firstPass = true
-  //   this.currentImage = 0;
-  // }
+  checkEndbossAnimation(){
+    if (this.startAnimation == true) {
+      this.setParametersForStartingAnimation()};
 
+    this.checkAttackandAlertAnimation();
 
-  // /**
-  //  * if the Endboss dies, it has to play an animation one time
-  //  */
-  // isDeadAnimation() {
-  //     this.playAnimationDead(this.IMAGES_DEAD);
-  // }
+    if (this.canStartWalkingAnimation()) {
+      this.playAnimation(this.IMAGES_WALKING)
+      this.x -= 20};
+
+    this.checkHurtandDeadAnimation();
+  }
+  
+  checkAttackandAlertAnimation(){
+    if (this.canStartAlertAnimation()) {
+      this.playAnimation(this.IMAGES_ALERT);}
+    if (this.canStartAttackAnimation()) {
+      this.playAnimation(this.IMAGES_ATTACK)
+      this.jumpOnRightPicture();}
+  }
+
+  checkHurtandDeadAnimation(){
+    if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);}
+    if (this.isDead()) {
+      this.playAnimationDead(this.IMAGES_DEAD);}
+  }
+
 
   /**
    * 1 jump on the attack animation at the G18 picture
@@ -180,7 +173,4 @@ class Endboss extends MovableObject {
     return -((this.timeStamp - setTime) % 10)
   }
 
-    // youwon() {
-    //     location.reload();
-    // }
 }

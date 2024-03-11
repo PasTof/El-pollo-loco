@@ -39,6 +39,10 @@ class ThrowableObject extends MovableObject {
             }
 
         }, 25);
+        this.splashBottleInterval();
+    }
+
+    splashBottleInterval(){
         setInterval(() => {
             if (this.splashBottle) {
                 this.speedY = 0 

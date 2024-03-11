@@ -42,6 +42,10 @@ class Chicken extends MovableObject {
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
+        this.animateHitChicken();
+    }
+
+    animateHitChicken(){
         setInterval(() => {
             if (this.getHit) {
                 this.loadImage('img/3_enemies_chicken/chicken_normal/2_dead/dead.png');

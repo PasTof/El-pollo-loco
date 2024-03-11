@@ -97,31 +97,46 @@ class Character extends MovableObject {
 
 
     animate() {
+        this.movements();
+        this.characterAnimations();
+    }
 
+    movements(){
         setInterval(() => {
             this.walking_sound.pause();
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
-                this.walking_sound.play();
-                this.currentTime = new Date().getTime();
-            }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true
-                this.walking_sound.play();
-                this.currentTime = new Date().getTime();
-            }
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.jump()
-                this.jump_sound.play();
-                this.currentTime = new Date().getTime();
-            }
+            this.checkMoveRight();
+            this.checkMoveLeft();
+            this.checkJump();
             this.world.camera_x = -this.x + 100;
         }, 900 / 60);
+    }
 
+    checkMoveRight(){
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.walking_sound.play();
+            this.currentTime = new Date().getTime();
+        }
+    }
+    checkMoveLeft(){
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true
+            this.walking_sound.play();
+            this.currentTime = new Date().getTime();
+        }
+    }
+    checkJump(){
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.jump()
+            this.jump_sound.play();
+            this.currentTime = new Date().getTime();
+        }
+    }
+
+    characterAnimations(){
         setInterval(() => {
-
             if (this.isDead()) {
                 this.playAnimationDead(this.IMAGES_DEAD);
             }
@@ -140,11 +155,7 @@ class Character extends MovableObject {
                     this.playAnimationDead(this.IMAGES_IDLE);
                 }
             }
-
-
         }, 90);
-
-
     }
 
     isAboveChicken(mo) {

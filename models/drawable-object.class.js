@@ -39,7 +39,7 @@ class DrawableOject {
             ctx.strokeStyle = "transparent";
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
-        }
+        } 
     }
 
     setPercentage(percentage) {
@@ -59,7 +59,6 @@ class DrawableOject {
         } else if (this.percentage > 20) {
             return 1;
         } else {
-            return 0;
+            return 0;} 
         }
-    }
 }
