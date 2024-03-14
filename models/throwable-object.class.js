@@ -28,6 +28,9 @@ class ThrowableObject extends MovableObject {
         this.throw();
     }
 
+    /**
+    * lets the character throw a bottle  
+    */
     throw() {
         this.speedY = 30;
         this.applyGravity();
@@ -42,11 +45,14 @@ class ThrowableObject extends MovableObject {
         this.splashBottleInterval();
     }
 
+    /**
+    * lets bottle splash when it hit  
+    */
     splashBottleInterval(){
         setInterval(() => {
             if (this.splashBottle) {
                 this.speedY = 0 
-                this.playAnimationDead(this.IMAGES_SPLASH);
+                this.playAnimationOnce(this.IMAGES_SPLASH);
                 setTimeout(() => {
                     this.y = 600
                 }, 500);

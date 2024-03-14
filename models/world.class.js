@@ -31,7 +31,9 @@ class World {
         this.run();
     }
 
-
+    /**
+    * starts the game  
+    */
     startGame() {
         if (this.keyboard.ENTER) {
             for (let i = 0; i < this.level.enemies.length - 1; i++) {
@@ -41,10 +43,16 @@ class World {
         }
     }
 
+    /**
+    * sets the character  
+    */
     setWorld() {
         this.character.world = this;
     }
 
+    /**
+    * starts the gameOver screen and starts a new game  
+    */
     gameover() {
         if (this.character.gameOver) {
             let dead = new Gameover();
@@ -56,6 +64,9 @@ class World {
         }
     }
 
+    /**
+    * starts the win screen and starts a new game
+    */
     winGame() {
         if (this.endboss.energy == 0) {
             setTimeout(() => {
@@ -70,6 +81,9 @@ class World {
         }
     }
 
+    /**
+    * checks if the Character is game Over  
+    */
     checkGameOver() {
         if (this.character.energy == 0) {
             this.character.gameOver = true;
@@ -80,6 +94,9 @@ class World {
         }
     }
 
+    /**
+    * checks if the Endboss is game Over  
+    */
     checkGameOverEnemie() {
         if (this.enemies.energy == 0) {
             this.enemies.gameOver = true;
@@ -87,6 +104,9 @@ class World {
         }
     }
 
+    /**
+    * starts an intervall with all the functions needed for playing the game 
+    */
     run() {
         setInterval(() => {
             this.startGame();
@@ -101,7 +121,9 @@ class World {
         }, 90);
     }
 
-
+    /**
+    * throws a bottle when Character has one  
+    */
     checkThrowObjects() {
         if (this.keyboard.D && this.character.collected_bottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
@@ -111,6 +133,10 @@ class World {
             this.character.currentTime = new Date().getTime();
         }
     }
+
+    /**
+    * checks the x of the character to start the boss animation 
+    */
     checkXCharacter() {
         if (this.character.x >= 1800 && !this.animationStarted) {
             this.endboss.startAnimation = true;
@@ -118,6 +144,9 @@ class World {
         }
     }
 
+    /**
+    * checks if a bottle hits a enemy 
+    */
     checkCollisionEnemy() {
         this.level.enemies.forEach((enemy) => {
             this.throwableObjects.forEach(element => {
@@ -125,13 +154,18 @@ class World {
                     element.splashBottle = true;
                     this.splashBottlesound.play();
                     enemy.hit(3);
-                    this.statusBarEndboss.setPercentage(enemy.energy)}
+                    this.statusBarEndboss.setPercentage(enemy.energy)
+                }
             });
             if (this.character.x > 2200 && !enemy.hadfirstcontact) {
-                enemy.hadfirstcontact = true }
+                enemy.hadfirstcontact = true
+            }
         });
     }
 
+    /**
+    * checks if a enemie hits the Character 
+    */
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             this.jumpOnChicken(enemy);
@@ -143,6 +177,10 @@ class World {
         });
     }
 
+    /**
+    * checks if the character hits a chicken from above
+    * @param {String} e 
+    */
     jumpOnChicken(e) {
         if (this.character.isAboveChicken(e) && this.character.speedY < 0) {
             this.character.aboveChicken = true;
@@ -155,16 +193,26 @@ class World {
             this.character.aboveChicken = false;
     }
 
+    /**
+    * @returns true if the is above the chicken 
+    * @param {String} e 
+    */
     isCharacterAboveChicken(e) {
         return !this.character.dead && this.character.aboveChicken == true && this.character.topPartBottomContact(e) && e instanceof Chicken
     }
 
+    /**
+    * @returns true if the character is back on ground 
+    */
     isCharacterOnGroundAgain(e) {
         return this.character.aboveChicken == true &&
             !this.character.isAboveChicken(e) &&
             !(e instanceof Endboss)
     }
 
+    /**
+    * checks if the coin got collected 
+    */
     checkcoin() {
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
@@ -175,7 +223,9 @@ class World {
             }
         })
     }
-
+    /**
+    * checks if the bottle got collected 
+    */
     checkbottles() {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
@@ -186,7 +236,9 @@ class World {
             }
         })
     }
-
+    /**
+    * draws all the images  
+    */
     draw() {
         if (!this.keyboard.ENTER) {
             this.addToMap(this.startscreen);
@@ -194,18 +246,24 @@ class World {
             this.drawCanvas();
             this.drawBars();
             this.drawMovableObjects();
-            this.drawEndScreen(); }
+            this.drawEndScreen();
+        }
         let self = this;
         requestAnimationFrame(function () {
-            self.draw() });
+            self.draw()
+        });
     };
-
+    /**
+    * sets the canvas  
+    */
     drawCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
     }
-
+    /**
+    * draws the endscreen 
+    */
     drawEndScreen() {
         this.ctx.translate(-this.camera_x, 0);
         this.addObjectToMap(this.gameEndScreen);
@@ -213,6 +271,9 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /**
+    * draws all the bars 
+    */
     drawBars() {
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
@@ -222,6 +283,9 @@ class World {
         this.ctx.translate(this.camera_x, 0);
     }
 
+    /**
+    * draws all the Movable Objects 
+    */
     drawMovableObjects() {
         this.addToMap(this.character);
         this.addObjectToMap(this.level.clouds);
@@ -230,13 +294,19 @@ class World {
         this.addObjectToMap(this.level.bottles);
         this.addObjectToMap(this.throwableObjects);
     }
-
+    /**
+    * adds more objects to The map 
+    * @param {Array} objects 
+    */
     addObjectToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
     }
-
+    /**
+    * Adds one Object to the map
+    * @param {Object} mo 
+    */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
@@ -248,8 +318,12 @@ class World {
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }
-    };
+    }
 
+    /**
+    * flips the Image
+    * @param {Object} mo  
+    */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -257,11 +331,18 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    /**
+    * flips the Image back
+    * @param {Object} mo  
+    */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
 
+    /**
+    * clears all the intervalls  
+    */
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }

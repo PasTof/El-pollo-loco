@@ -5,6 +5,9 @@ class CoinandBottle extends MovableObject {
         this.coinOrBottle(img);
     }
 
+    /**
+    * checks if its a coin or a bottle  
+    */
     coinOrBottle(img){
         if (img == 'img/6_salsa_bottle/2_salsa_bottle_on_ground.png' || 'img/6_salsa_bottle/1_salsa_bottle_on_ground.png') {
             this.x = 120 + Math.random() * 1500; 

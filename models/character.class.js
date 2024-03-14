@@ -94,14 +94,18 @@ class Character extends MovableObject {
         this.animate();
     }
 
-
-
+    /**
+     * animates the movements  
+     */
     animate() {
         this.movements();
         this.characterAnimations();
     }
 
-    movements(){
+    /**
+    * checks all the movements 
+    */
+    movements() {
         setInterval(() => {
             this.walking_sound.pause();
             this.checkMoveRight();
@@ -111,7 +115,10 @@ class Character extends MovableObject {
         }, 900 / 60);
     }
 
-    checkMoveRight(){
+    /**
+    * checks if the character needs to move right 
+    */
+    checkMoveRight() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
             this.otherDirection = false;
@@ -119,7 +126,11 @@ class Character extends MovableObject {
             this.currentTime = new Date().getTime();
         }
     }
-    checkMoveLeft(){
+
+    /**
+    * checks if the character needs to move left 
+    */
+    checkMoveLeft() {
         if (this.world.keyboard.LEFT && this.x > 0) {
             this.moveLeft();
             this.otherDirection = true
@@ -127,7 +138,11 @@ class Character extends MovableObject {
             this.currentTime = new Date().getTime();
         }
     }
-    checkJump(){
+
+    /**
+    * checks if the character needs to jump 
+    */
+    checkJump() {
         if (this.world.keyboard.SPACE && !this.isAboveGround()) {
             this.jump()
             this.jump_sound.play();
@@ -135,10 +150,13 @@ class Character extends MovableObject {
         }
     }
 
-    characterAnimations(){
+    /**
+    * checks which animation the Character needs  
+    */
+    characterAnimations() {
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimationDead(this.IMAGES_DEAD);
+                this.playAnimationOnce(this.IMAGES_DEAD);
             }
             else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
@@ -152,22 +170,33 @@ class Character extends MovableObject {
                 } else if (this.timePassedCheckSleep()) {
                     this.playAnimation(this.IMAGES_LONG_IDLE);
                 } else if (this.timePassedCheck()) {
-                    this.playAnimationDead(this.IMAGES_IDLE);
+                    this.playAnimationOnce(this.IMAGES_IDLE);
                 }
             }
         }, 90);
     }
 
+    /**
+    * @returns the position abouve the chicken 
+    */
     isAboveChicken(mo) {
-        return this.y + this.height - this.offset.bottom -30 < mo.y + mo.offset.top;
+        return this.y + this.height - this.offset.bottom - 30 < mo.y + mo.offset.top;
     }
 
+    /**
+    * checks how much time has passed 
+    * @returns true or false if the Character has not moved for 3s  
+    */
     timePassedCheck() {
         let timepassed = new Date().getTime() - this.currentTime;
         timepassed = timepassed / 1000;
         return timepassed > 3 ? true : false;
     }
 
+    /**
+    * checks how much time has passed 
+    * @returns true or false if the Character has not moved for 5s  
+    */
     timePassedCheckSleep() {
         let timepassed = new Date().getTime() - this.currentTime;
         timepassed = timepassed / 1000;

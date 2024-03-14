@@ -32,6 +32,9 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
+    /**
+    * starts the animation from the chicken  
+    */
     animate() {
         setInterval(() => {
             if (this.startWalking) {
@@ -45,6 +48,9 @@ class Chicken extends MovableObject {
         this.animateHitChicken();
     }
 
+    /**
+    * animates the dead chicken if it got hit  
+    */
     animateHitChicken(){
         setInterval(() => {
             if (this.getHit) {

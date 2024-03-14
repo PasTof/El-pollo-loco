@@ -9,11 +9,19 @@ class DrawableOject {
     width = 100;
     percentage = 100;
 
+    /**
+    * loads the image
+    * @param {string} path  
+    */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+    * draws the Image inserted
+    * @param {string} ctx  
+    */
     draw(ctx) {
         try {
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -24,6 +32,10 @@ class DrawableOject {
         
     }
 
+    /**
+    * loads an array with images 
+    * @param {Array} arr   
+    */
     loadImages(arr) {
         arr.forEach(path => {
             let img = new Image();
@@ -32,6 +44,10 @@ class DrawableOject {
         });
     }
 
+    /**
+    * draws a frame around Character and Chicken 
+    * @param {string} ctx 
+    */
     drawFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken) {
             ctx.beginPath();
@@ -42,11 +58,19 @@ class DrawableOject {
         } 
     }
 
+    /**
+    * sets the percentage 
+    * @param {Number} percentage  
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
+
+    /**
+    * checks how high the percentage is 
+    */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;
