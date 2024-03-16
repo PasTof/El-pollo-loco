@@ -12,7 +12,9 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     initialicetouch();
+    
 }
+
 
 /**
  * function for full Screen 
@@ -53,6 +55,15 @@ function initialicetouch() {
         keyboard.D = true;
     });
 
+    document.getElementById('sound').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (keyboard.M) {
+            keyboard.M = false;
+        }else{
+            keyboard.M = true;
+        }
+    });
+
     document.getElementById('throw').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.D = false;
@@ -84,6 +95,13 @@ document.addEventListener("keydown", (e) => {
     if (e.keyCode == 13) {
         keyboard.ENTER = true;
         firststart = false;
+    }
+    if (e.keyCode == 77) {
+        if (keyboard.M) {
+            keyboard.M = false;
+        }else{
+            keyboard.M = true
+        }
     }
     if (e.keyCode == 39) {
         keyboard.RIGHT = true
@@ -149,4 +167,21 @@ function screenRotation() {
             document.getElementById('screen-rotation-container').innerHTML = '';
         }
     }, 1000);
+}
+
+checkMute();
+
+/**
+ * checks if the sound needs to be mute or on 
+ */
+function checkMute() {
+    setInterval(() => {
+        if (keyboard.M) {
+            document.getElementById('sound').src = 'img/icons/sound.svg'
+        }else {
+            document.getElementById('sound').src = 'img/icons/soundMute.svg'
+        }
+        
+    
+    }, 100);
 }

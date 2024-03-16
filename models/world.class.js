@@ -20,6 +20,7 @@ class World {
     collectBottle = new Audio('audio/bottle_collected.wav');
     splashBottlesound = new Audio('audio/bottle_splash.wav');
     hurtSound = new Audio('audio/hurt.mp3');
+    currentTimeBottle = new Date().getTime();
 
 
     constructor(canvas, keyboard) {
@@ -58,9 +59,7 @@ class World {
             let dead = new Gameover();
             this.gameEndScreen.push(dead);
             this.clearAllIntervals();
-            setTimeout(() => {
-                location.reload();
-            }, 4000);
+            
         }
     }
 
@@ -74,9 +73,7 @@ class World {
                 this.gameEndScreen.push(dead);
 
                 this.clearAllIntervals();
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
+                
             }, 1000);
         }
     }
@@ -89,7 +86,9 @@ class World {
             this.character.gameOver = true;
             setTimeout(() => {
                 this.gameover();
+                 
             }, 1000);
+
 
         }
     }
@@ -118,6 +117,7 @@ class World {
             this.checkCollisionEnemy();
             this.checkXCharacter();
             this.winGame();
+            
         }, 90);
     }
 
@@ -125,13 +125,24 @@ class World {
     * throws a bottle when Character has one  
     */
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.collected_bottles > 0) {
+        if (this.timePassedCheckThrow() && this.keyboard.D && this.character.collected_bottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
             this.character.collected_bottles -= 10;
             this.bottleBar.setPercentage(this.character.collected_bottles);
             this.character.currentTime = new Date().getTime();
+            this.currentTimeBottle = new Date().getTime();
+            this.timepassedthrow = this.currentTimeBottle;
         }
+    }
+
+    /**
+    * checks how much time has passed since the last throw  
+    */
+    timePassedCheckThrow() {
+        let timepassedthrow = new Date().getTime() - this.currentTimeBottle;
+        timepassedthrow = timepassedthrow / 1000;
+        return timepassedthrow > 2 ? true : false;
     }
 
     /**
@@ -152,7 +163,9 @@ class World {
             this.throwableObjects.forEach(element => {
                 if (element.isColliding(enemy)) {
                     element.splashBottle = true;
-                    this.splashBottlesound.play();
+                    if (!this.keyboard.M) {
+                        this.splashBottlesound.play();
+                    }
                     enemy.hit(3);
                     this.statusBarEndboss.setPercentage(enemy.energy)
                 }
@@ -170,7 +183,9 @@ class World {
         this.level.enemies.forEach((enemy) => {
             this.jumpOnChicken(enemy);
             if (this.character.isColliding(enemy)) {
-                this.hurtSound.play();
+                if (!this.keyboard.M) {
+                    this.hurtSound.play();
+                }
                 this.character.hit(10);
                 this.statusBar.setPercentage(this.character.energy);
             }
@@ -216,7 +231,9 @@ class World {
     checkcoin() {
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
-                this.collectCoin.play();
+                if (!this.keyboard.M) {
+                    this.collectCoin.play();
+                }
                 coin.y = -200;
                 this.character.collected_coins += 10;
                 this.coinBar.setPercentage(this.character.collected_coins);
@@ -229,7 +246,9 @@ class World {
     checkbottles() {
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
-                this.collectBottle.play();
+                if (!this.keyboard.M) {
+                    this.collectBottle.play();
+                }
                 bottle.y = -200
                 this.character.collected_bottles += 20;
                 this.bottleBar.setPercentage(this.character.collected_bottles);
